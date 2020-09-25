@@ -1,3 +1,4 @@
+lancer les commandes en tant que administrateur:
 
 pip install virtualenv
 virtualenv venv
