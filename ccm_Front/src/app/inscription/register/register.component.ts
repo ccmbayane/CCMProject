@@ -1,4 +1,6 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -6,10 +8,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
+  type: any;
+  constructor(private activeRoute: ActivatedRoute) {
+    this.activeRoute.params.subscribe((params) => {
+      this.type = params['type'];
+    });
   }
 
+  ngOnInit(): void {}
 }

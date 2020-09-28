@@ -1,6 +1,6 @@
 <div class="d-flex justify-content-center">
 	<div style="display: flexbox; justify-items: center; align-items: center; border: 1px solid; margin: 80px;">
-		<h4>Login</h4>
+		<h4 style="text-align: center;">Login</h4>
 		<div class="form">
 			<form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
 				<nz-form-item>
@@ -24,7 +24,24 @@
 				</div>
 				<button nz-button class="login-form-button login-form-margin" [nzType]="'primary'"
 					(click)="submitForm()">Log in</button>
-				Or <a href="/inscription/register"> register now! </a>
+				Or 
+				<button
+      nz-button
+      nzType="primary"
+      nz-popover
+      nzPopoverTitle="Title"
+      [(nzPopoverVisible)]="visible"
+      (nzPopoverVisibleChange)="change($event)"
+      nzPopoverTrigger="click"
+      [nzPopoverContent]="contentTemplate"
+    >
+	Register now!
+    </button>
+    <ng-template #contentTemplate>
+	  <a (click)="goTo('SP')">Register SP</a>
+	  <br>	
+      <a (click)="goTo('PP')">Register PP</a>
+    </ng-template>
 			</form>
 		</div>
 	</div>

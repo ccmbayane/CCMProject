@@ -29,6 +29,7 @@ import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { HomeComponent } from './home/home.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AuthenticationGuard } from './services/authentication.guard';
+import { NzPopoverModule } from 'ng-zorro-antd/popover';
 
 registerLocaleData(en);
 const icons: IconDefinition[] = [AccountBookFill, AlertOutline, AlertFill];
@@ -54,7 +55,8 @@ const icons: IconDefinition[] = [AccountBookFill, AlertOutline, AlertFill];
     NzMenuModule,
     BrowserAnimationsModule,
     NzIconModule.forRoot(icons),
-    NzLayoutModule
+    NzLayoutModule,
+    NzPopoverModule
   ],
   exports: [
     LoginComponent,

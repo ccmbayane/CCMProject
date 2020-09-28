@@ -42,41 +42,41 @@ export class StepComponent implements OnInit, OnChanges {
     private authService: AuthentitcationService
   ) {}
   ngOnChanges(changes: SimpleChanges): void {
-    this.current_steps = this.config.fetch(changes['steps'].currentValue);
+    console.log(this.config.fetch(changes['steps'].currentValue));
+
+    this.current_steps = this.config.fetch(changes['steps'].currentValue)
+      ? this.config.fetch(changes['steps'].currentValue)
+      : { steps: [] };
     console.log(this.current_steps);
-    this.current = this.current_steps.current;
-    this.count = this.current_steps.count;
-    this.next_button = this.current_steps.next_button;
-    this.previous_button = this.current_steps.previous_button;
-    this.done_button = this.current_steps.done_button;
+    this.current = this.current_steps?.current;
+    this.count = this.current_steps?.count;
+    this.next_button = this.current_steps?.next_button;
+    this.previous_button = this.current_steps?.previous_button;
+    this.done_button = this.current_steps?.done_button;
     this.changeContent();
   }
 
   submitForm(): void {}
 
   ngOnInit(): void {
-    this.current_steps.steps.forEach((item) => {
-      const obj = {};
-      item.fields.forEach((field) => {
-        switch (field.type) {
-          case 'password':
-            obj[field.name] = [
-              null,
-              [
-                Validators.required,
-                Validators.pattern(
-                  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/
-                )
-              ]
-            ];
-            break;
-          default:
-            obj[field.name] = [null, [Validators.required]];
-            break;
-        }
+    this.current_steps = this.config.fetch(this.steps)
+      ? this.config.fetch(this.steps)
+      : { steps: [] };
+    if (this.current_steps?.steps && this.current_steps.steps.length > 0) {
+      console.log('here');
+
+      this.current_steps.steps.forEach((item) => {
+        const obj = {};
+        item.fields.forEach((field) => {
+          obj[field.name] = [null, [Validators.required]];
+        });
+        this.validateForm.push(this.fb.group(obj));
       });
-      this.validateForm.push(this.fb.group(obj));
-    });
+    } else {
+      console.log('zejfhkjhkzje');
+
+      this.validateForm.push(this.fb.group({}));
+    }
     console.log(this.validateForm);
   }
 
@@ -117,7 +117,10 @@ export class StepComponent implements OnInit, OnChanges {
   }
 
   changeContent(): void {
-    this.current_form = this.current_steps.steps[this.current - 1].fields;
+    this.current_form = this.current_steps?.steps[this.current - 1]
+      ? this.current_steps.steps[this.current - 1].fields
+      : [];
+    console.log(this.current_steps?.steps[this.current - 1]);
   }
 
   password_validator(password: string) {

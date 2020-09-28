@@ -3,30 +3,15 @@
 	</nz-step>
 </nz-steps>
 
-<div class="steps-content">
-	<form [formGroup]="validateForm[current -1]" #myForm="ngForm" (ngSubmit)="submitForm()">
+<div class="steps-content" *ngIf="current_steps.steps.length > 0">
+	<form [formGroup]="validateForm[current -1]" (ngSubmit)="submitForm()" >
 		<nz-form-item *ngFor="let item of current_form">
 			<!-- <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="{{item.id}}">{{item.title}}</nz-form-label> -->
 
 			<nz-form-control [nzSm]="14" [nzXs]="24" *ngIf="item.type === 'text'" [nzErrorTip]="passwordErrorTpl">
 				<input nz-input [formControlName]="item.name" nzHasFeedback placeholder="{{item.placeholder}}"
 					attr.id="{{item.id}}" />
-				<!-- <div  style="color: red; margin-left: -50px;">
-					The {{item.name}} field is required
-				</div> -->
-				<!-- <ng-container *ngIf="validateForm[current -1].controls[item.name].errors.required && validateForm[current -1].controls[item.name].touched">
-					Please confirm your password!
-				  </ng-container> -->
-
-
-				  <ng-template #passwordErrorTpl let-control>
-					<ng-container *ngIf="control.hasError('required') && control.touched">
-					  Please confirm your password!
-					</ng-container>
-					<ng-container *ngIf="control.hasError('confirm')">
-					  Password is inconsistent!
-					</ng-container>
-				  </ng-template>
+				
 
 
 			</nz-form-control>
@@ -49,7 +34,7 @@
 			<nz-form-control [nzSm]="14" [nzXs]="24" *ngIf="item.type === 'select'">
 				<nz-select [formControlName]="item.name" nzPlaceHolder="{{item.placeholder}}" attr.id="{{item.id}}">
 					<nz-option *ngFor="let selectItem of item.value" nzValue="{{selectItem.value}}"
-						nzLabel="{{selectItem.label}}"></nz-option>
+						nzLabel="{{selectItem.value}}"></nz-option>
 				</nz-select>
 				
 			</nz-form-control>

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { parse_config, parse_config_register } from '../helpers/util';
 import { isInteger } from 'ng-zorro-antd/core/util';
 
 @Injectable({
@@ -13,39 +14,27 @@ export class ConfigurationService {
   constructor(private http: HttpClient) {}
 
   fetch(url) {
+    console.log(url);
+
     const currentUser: any = JSON.parse(localStorage.getItem('current-user'));
-    console.log(currentUser);
+
+    if (!currentUser) {
+      let register_config = localStorage.getItem('register_config' + url);
+      if (register_config) {
+        return JSON.parse(register_config);
+      } else {
+        this.http.get(`${this.common_url}/forms/${url}`).subscribe((result) => {
+          localStorage.setItem(
+            'register_config' + url,
+            JSON.stringify(parse_config_register(result))
+          );
+        });
+        return JSON.parse(localStorage.getItem('register_config' + url));
+      }
+    }
 
     this.privileges = currentUser.profile.privileges;
-    this.steps = currentUser.profile.privileges.map((item, index) => {
-      return {
-        count: item.form[0] ? parseInt(item.form[0].count) : 0,
-        current: 1,
-        next_button: item.form[0] ? item.form[0].next_button : 'Next',
-        previous_button: item.form[0]
-          ? item.form[0].previous_button
-          : 'Previous',
-        done_button: item.form[0] ? item.form[0].done_button : 'Done',
-        code: item.form[0] ? item.form[0].code : 'register',
-        steps: item.form[0]
-          ? item.form[0].formStep.map((itemStep, indexStep) => {
-              return {
-                title: itemStep.title,
-                fields: itemStep.fields.map((itemField, indexField) => {
-                  return {
-                    id: itemField.id,
-                    name: itemField.name,
-                    placeholder: itemField.placeholder,
-                    title: itemField.title,
-                    type: itemField.type,
-                    value: itemField.value
-                  };
-                })
-              };
-            })
-          : []
-      };
-    });
+    this.steps = parse_config(currentUser);
 
     return url === 'menu'
       ? this.privileges
