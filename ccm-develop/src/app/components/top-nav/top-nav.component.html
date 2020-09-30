@@ -1,0 +1,35 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+	<a class="navbar-brand" [routerLink]="['/']">CCM</a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+		aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	<div class="collapse navbar-collapse" id="navbarNav">
+		<ul class="navbar-nav flex-row align-items-center d-flex flex-wrap">
+			<ng-template [ngIf]="menus" [ngIfElse]="loading">
+				<div *ngFor="let item of menus">
+					<li [ngClass]="{'nav-item': true,'ml-auto': item.title === 'Logout','p-2': true, 'active': item.active}"
+						*ngIf="item.children.length === 0">
+						<a class="nav-link" (click)="goto(item)">{{item.title}} <span
+								class="sr-only">(current)</span></a>
+					</li>
+					<li class="nav-item dropdown p-2" *ngIf="item.children.length > 0">
+						<a [ngClass]="{ 'nav-link': true, 'dropdown-toggle': true, 'active': item.active }" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+							aria-haspopup="true" aria-expanded="false">
+							{{item.title}}
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink"
+							*ngFor="let subitem of item.children">
+							<a class="dropdown-item" (click)="goto(subitem, item)" >{{subitem.title}}</a>
+						</div>
+					</li>
+				</div>
+			</ng-template>
+
+		</ul>
+	</div>
+</nav>
+
+<ng-template #loading>
+	Loding ......
+</ng-template>
