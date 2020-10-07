@@ -4,17 +4,37 @@
 		<div class="form">
 			<form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
 				<nz-form-item>
-					<nz-form-control nzErrorTip="Please insert your username!">
+					<nz-form-control nzHasFeedback nzValidatingTip="Validating..." [nzErrorTip]="userErrorTpl">
 						<nz-input-group nzPrefixIcon="user">
 							<input type="text" nz-input formControlName="login" placeholder="Username" />
 						</nz-input-group>
+						<ng-template #userErrorTpl let-control>
+							<ng-container *ngIf="control.hasError('minlength')">
+								Min length is 6 !
+							</ng-container>
+							<ng-container *ngIf="control.hasError('required')">
+								Username is required !
+							</ng-container>
+						</ng-template>
 					</nz-form-control>
 				</nz-form-item>
 				<nz-form-item>
-					<nz-form-control nzErrorTip="Please insert your Password!">
+					<nz-form-control nzHasFeedback nzValidatingTip="Validating..." [nzErrorTip]="userErrorTpl">
 						<nz-input-group nzPrefixIcon="lock">
-							<input type="password" nz-input formControlName="password" placeholder="Password" />
+							<input type="password" nz-input formControlName="password" placeholder="Password"
+								minlength="6" />
 						</nz-input-group>
+						<ng-template #userErrorTpl let-control>
+							<ng-container *ngIf="control.hasError('minlength')">
+								Min length is 6 !
+							</ng-container>
+							<ng-container *ngIf="control.hasError('required')">
+								Passzord is required !
+							</ng-container>
+							<ng-container *ngIf="control.hasError('pattern')">
+								The password must contain at least one special character, numbers, and letters
+							</ng-container>
+						</ng-template>
 					</nz-form-control>
 				</nz-form-item>
 				<div nz-row class="login-form-margin">
@@ -23,25 +43,18 @@
 					</div>
 				</div>
 				<button nz-button class="login-form-button login-form-margin" [nzType]="'primary'"
-					(click)="submitForm()" [disabled]="false">Log in</button>
-				Or 
-				<button
-      nz-button
-      nzType="primary"
-      nz-popover
-      nzPopoverTitle="Title"
-      [(nzPopoverVisible)]="visible"
-      (nzPopoverVisibleChange)="change($event)"
-      nzPopoverTrigger="click"
-      [nzPopoverContent]="contentTemplate"
-    >
-	Register now!
-    </button>
-    <ng-template #contentTemplate>
-	  <a (click)="goTo('SP')">Register SP</a>
-	  <br>	
-      <a (click)="goTo('PP')">Register PP</a>
-    </ng-template>
+					(click)="submitForm()" [disabled]="!validateForm.valid">Log in</button>
+				Or
+				<button nz-button nzType="primary" nz-popover [(nzPopoverVisible)]="visible"
+					(nzPopoverVisibleChange)="change($event)" nzPopoverTrigger="click"
+					[nzPopoverContent]="contentTemplate">
+					Register now!
+				</button>
+				<ng-template #contentTemplate>
+					<a (click)="goTo('SP')">Register SP</a>
+					<br>
+					<a (click)="goTo('PP')">Register PP</a>
+				</ng-template>
 			</form>
 		</div>
 	</div>

@@ -1,6 +1,0 @@
-post http://localhost:5000/utilisateurs/login
-
-{
-    "login":"elomari",
-    "password":"elomari" 
-}

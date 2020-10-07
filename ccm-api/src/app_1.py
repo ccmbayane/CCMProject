@@ -1,6 +1,5 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import and_
 from flask_marshmallow import Marshmallow
 from marshmallow import Schema, fields, ValidationError, pre_load
 from flask_cors import CORS
@@ -9,7 +8,7 @@ from base64 import b64decode
 
 app = Flask(__name__)
 CORS(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'oracle://CCMDB:CCMDB123@localhost:1521/XE'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'oracle://CCMDB:CCMDB123@localhost:1521/xe'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 
@@ -329,11 +328,8 @@ def get_utilisateurByLoginAndPassword():
     login = request.json['login']
     password = request.json['password']
     utilisateur = Utilisateur.query.filter(
-        and_(Utilisateur.login == login, Utilisateur.password == password)).first()
-    if(utilisateur):
-        return utilisateur_schema.jsonify(utilisateur)
-    else:
-        return jsonify({'message': 'FORBIDDEN'}), 403
+        login == login, password == password).first()
+    return utilisateur_schema.jsonify(utilisateur)
 
 
 @app.route('/utilisateurs/<id>', methods=['PUT'])

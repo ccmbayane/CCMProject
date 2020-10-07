@@ -36,8 +36,9 @@ export class StepComponent implements OnInit, OnChanges {
 
   private common_url: string = environment.url;
   index;
-
+  payload = [{}];
   validateForm: FormGroup[] = [];
+  visible: boolean = false;
 
   constructor(
     private config: ConfigurationService,
@@ -47,6 +48,7 @@ export class StepComponent implements OnInit, OnChanges {
     private http: HttpClient
   ) {}
   ngOnChanges(changes: SimpleChanges): void {
+    this.visible = false;
     this.current_steps = this.config.fetch(changes['steps'].currentValue)
       ? this.config.fetch(changes['steps'].currentValue)
       : { steps: [] };
@@ -88,19 +90,32 @@ export class StepComponent implements OnInit, OnChanges {
   }
 
   done(): void {
-    this.validateForm[this.current - 1].value.password = 'admin';
+    // this.validateForm[this.current - 1].value.password = 'admin';
 
-    const payload = this.validateForm.map((item) => {
+    this.payload = this.validateForm.map((item) => {
       let obj = {};
       for (const key in item.controls) {
         if (Object.prototype.hasOwnProperty.call(item.controls, key)) {
-          obj[key] = item.controls[key].value;
+          if (item.controls[key].value instanceof Date) {
+            const val = item.controls[key].value;
+            obj[key] = `${val.toISOString()}`;
+          } else {
+            obj[key] = item.controls[key].value;
+          }
         }
       }
       return obj;
     });
-    console.log(payload);
+    this.visible = !this.visible;
     // this.authService.create(`/utilisateurs`, payload)
+  }
+
+  handleOk(): void {
+    this.visible = !this.visible;
+  }
+
+  handleCancel(event) {
+    this.visible = !this.visible;
   }
 
   upload(event) {
@@ -120,9 +135,7 @@ export class StepComponent implements OnInit, OnChanges {
   }
 
   password_validator(password: string) {
-    return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$gm/.exec(
-      password
-    );
+    return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/.exec(password);
   }
 
   email_validator(email: string) {

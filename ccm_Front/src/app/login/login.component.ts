@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit, OnChanges {
   validateForm: FormGroup;
   visible: boolean = false;
   common_url = environment.url;
-
+  showErrors = false;
   constructor(
     private fb: FormBuilder,
     private auth: AuthentitcationService,
@@ -39,15 +39,16 @@ export class LoginComponent implements OnInit, OnChanges {
     });
 
     this.validateForm = this.fb.group({
-      login: [null, [Validators.required]],
-      password: [null, [Validators.required]]
+      login: [null, [Validators.required, Validators.minLength(6)]],
+      password: [null, [Validators.required, Validators.minLength(6)]]
     });
+    // Validators.pattern(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/)
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     this.validateForm = this.fb.group({
-      login: [null, [Validators.required]],
-      password: [null, [Validators.required]]
+      login: [null, [Validators.required, Validators.minLength(6)]],
+      password: [null, [Validators.required, Validators.minLength(6)]]
     });
   }
 

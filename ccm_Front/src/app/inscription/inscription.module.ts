@@ -20,6 +20,8 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { RegisterComponent } from './register/register.component';
 import { AuthenticationGuard } from '../services/authentication.guard';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+// import { NzModalModule } from 'ng-zorro-antd/modal/modal.module';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 const icons: IconDefinition[] = [AccountBookFill, AlertOutline, AlertFill];
 
 const routes: Routes = [
@@ -55,6 +57,7 @@ const routes: Routes = [
     NzFormModule,
     NzIconModule.forRoot(icons),
     NzInputModule,
+    NzModalModule,
     NzDatePickerModule,
     RouterModule.forChild(routes)
   ],

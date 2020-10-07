@@ -1,17 +1,17 @@
-<nz-steps nzCurrent="{{current}}"  nzSize="small">
+<nz-steps nzCurrent="{{current}}" nzSize="small">
 	<nz-step *ngFor="let step of current_steps.steps" nzTitle="{{step.title}}" nzDescription="{{step.description}}">
 	</nz-step>
 </nz-steps>
 
 <div class="steps-content" *ngIf="current_steps.steps.length > 0">
-	<form [formGroup]="validateForm[current -1]" (ngSubmit)="submitForm()" >
+	<form [formGroup]="validateForm[current -1]" (ngSubmit)="submitForm()">
 		<nz-form-item *ngFor="let item of current_form">
 			<!-- <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="{{item.id}}">{{item.title}}</nz-form-label> -->
 
 			<nz-form-control [nzSm]="14" [nzXs]="24" *ngIf="item.type === 'text'" [nzErrorTip]="passwordErrorTpl">
 				<input nz-input [formControlName]="item.name" nzHasFeedback placeholder="{{item.placeholder}}"
 					attr.id="{{item.id}}" />
-				
+
 
 
 			</nz-form-control>
@@ -36,7 +36,7 @@
 					<nz-option *ngFor="let selectItem of item.value" nzValue="{{selectItem.value}}"
 						nzLabel="{{selectItem.value}}"></nz-option>
 				</nz-select>
-				
+
 			</nz-form-control>
 
 			<nz-form-control [nzSm]="14" [nzXs]="24" *ngIf="item.type === 'date'">
@@ -59,6 +59,14 @@
 		<button nz-button nzType="info" (click)="done()" *ngIf="current === count">
 			<span>{{done_button}}</span>
 		</button>
+		<nz-modal [(nzVisible)]="visible" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+			<div *ngFor="let item of payload; let i = index;">
+				<h3>Step number {{i + 1}}</h3>
+				<ul>
+					<li *ngFor="let subItem of item | keyvalue"> {{subItem.key}}: {{subItem.value}}</li>
+				</ul>
+			</div>
+		</nz-modal>
 	</div>
 </div>
 <!-- <div class="steps-action ">
@@ -72,3 +80,5 @@
 		<span>{{done_button}}</span>
 	</button>
 </div> -->
+
+
